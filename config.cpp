@@ -6,8 +6,10 @@ class CfgPatches
         {
                 "DZ_Data",
                 "DZ_Scripts",
-                "DZ_Gear_Camping",
-                "DZ_Characters_Backpacks"
+                "DZ_Vehicles_Wheeled",
+                "DZ_Vehicles_Parts",
+                "DZ_Sounds_Effects",
+				"DZ_Gear_Consumables"
         };
     };
 };
@@ -17,10 +19,10 @@ class CfgMods
         class IndraPersonalMod
         {
                 type="mod";
-                name = "Disable Sprint Metabolism";
+                name = "Indra personal Mod";
                 credits = "Indra Mahesa";
                 author = "Indra Mahesa";
-                dependencies[]={"Game", "Mission", "World"}; 
+                dependencies[]={"Game", "World", "Mission"}; 
                 class defs
                 {
                         class gameScriptModule
@@ -28,146 +30,241 @@ class CfgMods
                                 value="";
                                 files[]={"IndraPersonalMod/3_game"};
                         };
-                        class missionScriptModule
-                        {
-                                value="";
-                                files[]={"IndraPersonalMod/5_mission"};
-                        };
                         class worldScriptModule
                         {
                                 value="";
                                 files[]={"IndraPersonalMod/4_world"};
                         };
+                        class missionScriptModule
+                        {
+                                value="";
+                                files[]={"IndraPersonalMod/5_mission"};
+                        };
                 };
         };
 };
 
-class CfgVehicles
+class CfgVehicles 
 {
-	class TentBase;
-	class LargeTent : TentBase
+        class CarScript;
+        class SimulationModule;
+        class Sedan_02: CarScript
 	{
-		inventorySlot[] +=
+		class SimulationModule: SimulationModule
 		{
-			"Back"
+			class Engine {
+				rpmIdle = 900;
+				rpmMin = 1000;
+				rpmClutch = 1400;
+				rpmRedline = 7000;
+			};
 		};
-		itemInfo[] +=
-		{
-			"Clothing",
-			"Back"
-		};
-                attachments[]=
-                {
-                        "CamoNet",
-			"Lights"
-                };
 	};
 
-	// Define large tent backpack object
-	class Clothing;
-	class LargeTentBackpack : Clothing
+	class Inventory_Base;
+	class WoodenLog: Inventory_Base
 	{
-		scope = 2;
-		displayName = "Large Tent Backpack";
-		descriptionShort = "This is just simple backpack for a packing up Large Tent";
-		model = "\dz\gear\camping\large_tent_backpack.p3d";
-		inventorySlot[] +=
+		// weight=100;
+		itemBehaviour=2;
+	};
+};
+
+class CfgSoundSets {
+	class FMusic_Menu_SoundSet {
+		soundShaders[] = {"FMusic_Menu_SoundShader"};
+		volumeFactor = 1;
+		frequencyFactor = 1;
+		spatial = 0;
+	};
+};
+
+class CfgSoundShaders
+{
+	class FMusic_Menu_SoundShader {
+		samples[] = {{"IndraPersonalMod\sounds\custom_background_music.ogg", 1}};
+		volume = 0.5;
+	};
+
+        class baseVehiclesSedan_02_SoundShader;
+        class baseEngineSedan_02_SoundShader;
+        class Sedan_02_engine_start_SoundShader: baseVehiclesSedan_02_SoundShader
+	{
+		samples[]=
 		{
-			"Back"
-		};
-		itemInfo[] +=
-		{
-			"Clothing",
-			"Back"
-		};
-		rotationFlags = 16;
-		itemSize[] = { 10,4 };
-		itemsCargoSize[] = { 10,40 };
-		weight = 90000;
-		varWetMax = 0.49000001;
-		heatIsolation = 0.69999999;
-		visibilityModifier = 0.80000001;
-		soundAttType = "Military";
-		randomQuantity = 4;
-		class ClothingTypes
-		{
-			male = "dz\gear\camping\large_tent_backpack.p3d";
-			female = "dz\gear\camping\large_tent_backpack.p3d";
-		};
-		class DamageSystem
-		{
-			class GlobalHealth
+			
 			{
-				class Health
-				{
-					hitpoints = 2000;
-					transferToAttachmentsCoef = 0.5;
-					healthLevels[] =
-					{
-
-						{
-							1,
-
-							{
-								"DZ\gear\camping\data\bagpack.rvmat"
-							}
-						},
-
-						{
-							0.69999999,
-
-							{
-								"DZ\gear\camping\data\bagpack.rvmat"
-							}
-						},
-
-						{
-							0.5,
-
-							{
-								"DZ\gear\camping\data\bagpack_damage.rvmat"
-							}
-						},
-
-						{
-							0.30000001,
-
-							{
-								"DZ\gear\camping\data\bagpack_damage.rvmat"
-							}
-						},
-
-						{
-							0,
-
-							{
-								"DZ\gear\camping\data\bagpack_destruct.rvmat"
-							}
-						}
-					};
-				};
-			};
+				"IndraPersonalMod\sounds\engine_start.ogg",
+				1
+			}
 		};
-		class AnimEvents
+		volume=0.69999999;
+	};
+        class Sedan_02_engine_stop_SoundShader: baseVehiclesSedan_02_SoundShader
+	{
+		samples[]=
 		{
-			class SoundWeapon
+			
 			{
-				class pickUpItem_Light
-				{
-					soundSet = "pickUpBackPack_Metal_Light_SoundSet";
-					id = 796;
-				};
-				class pickUpItem
-				{
-					soundSet = "pickUpBackPack_Metal_SoundSet";
-					id = 797;
-				};
-				class drop
-				{
-					soundset = "taloonbag_drop_SoundSet";
-					id = 898;
-				};
-			};
+				"IndraPersonalMod\sounds\vaz_classic_engine_ext_stop.ogg",
+				1
+			}
 		};
+		volume=0.69999999;
+	};
+        class Sedan_02_engine_failed_start_fuel_SoundShader: baseVehiclesSedan_02_SoundShader
+	{
+		samples[]=
+		{
+			
+			{
+				"IndraPersonalMod\sounds\engine_failed_start_fuel.ogg",
+				1
+			}
+		};
+		volume=1;
+	};
+
+	class Sedan_02_Engine_Ext_Rpm0_SoundShader: baseEngineSedan_02_SoundShader
+	{
+		samples[]=
+		{
+			
+			{
+				"IndraPersonalMod\sounds\vaz_classic_engine_ext_rpm0.ogg",
+				1
+			}
+		};
+		frequency="0.85 * ((900 + ((rpm - 900)/(6500/5600))) max 900) / 850";
+		volume="0.4 * 1 * engineOn * 0.4 * ((900 + ((rpm - 900)/(6500/5600))) factor [(((850+1200)/2) + 2.5*50),(((850+1200)/2) - 50)]) * ((1 - 0.25*doors) max campos)";
+	};
+	class Sedan_02_Engine_Ext_Rpm1_SoundShader: baseEngineSedan_02_SoundShader
+	{
+		samples[]=
+		{
+			
+			{
+				"IndraPersonalMod\sounds\vaz_classic_engine_ext_rpm1.ogg",
+				1
+			}
+		};
+		frequency="0.85 * (900 + ((rpm - 900)/(6500/5600))) / 1200";
+		volume="0.4 * 1 * (thrust factor[0.1,0.45]) * (0.7 + 0.3 * (speed factor [10,60])) * engineOn * 0.6 * ((900 + ((rpm - 900)/(6500/5600))) factor [(((850+1200)/2) - 2.5*50),(((850+1200)/2) + 50)]) * ((900 + ((rpm - 900)/(6500/5600))) factor [(((1200+1700)/2) + 2.5*150),(((1200+1700)/2) - 150)]) * ((1 - 0.25*doors) max campos)";
+	};
+	class Sedan_02_Engine_Offload_Ext_Rpm1_SoundShader: baseEngineSedan_02_SoundShader
+	{
+		samples[]=
+		{
+			
+			{
+				"IndraPersonalMod\sounds\vaz_classic_engine_ext_offload_rpm1.ogg",
+				1
+			}
+		};
+		frequency="0.85 * (900 + ((rpm - 900)/(6500/5600))) / 1200";
+		volume="0.4 * 1 * (thrust factor[0.6,0.2]) * 0.8 * (0.7 + 0.3 * (speed factor [10,60])) * engineOn * 0.6 * ((900 + ((rpm - 900)/(6500/5600))) factor [(((850+1200)/2) - 2.5*50),(((850+1200)/2) + 50)]) * ((900 + ((rpm - 900)/(6500/5600))) factor [(((1200+1700)/2) + 2.5*150),(((1200+1700)/2) - 150)]) * ((1 - 0.25*doors) max campos)";
+	};
+	class Sedan_02_Engine_Ext_Rpm2_SoundShader: baseEngineSedan_02_SoundShader
+	{
+		samples[]=
+		{
+			
+			{
+				"IndraPersonalMod\sounds\vaz_classic_engine_ext_rpm2.ogg",
+				1
+			}
+		};
+		frequency="0.85 * (900 + ((rpm - 900)/(6500/5600))) / 1700";
+		volume="0.4 * 1 * (thrust factor[0.1,0.45]) * (0.7 + 0.3 * (speed factor [10,60])) * engineOn * 0.85 * ((900 + ((rpm - 900)/(6500/5600))) factor [(((1200+1700)/2) - 2.5*150),(((1200+1700)/2) + 150)]) * ((900 + ((rpm - 900)/(6500/5600))) factor [(((1700+2300)/2) + 2.5*150),(((1700+2300)/2) - 150)]) * ((1 - 0.25*doors) max campos)";
+	};
+	class Sedan_02_Engine_Offload_Ext_Rpm2_SoundShader: baseEngineSedan_02_SoundShader
+	{
+		samples[]=
+		{
+			
+			{
+				"IndraPersonalMod\sounds\vaz_classic_engine_ext_offload_rpm2.ogg",
+				1
+			}
+		};
+		frequency="0.85 * (900 + ((rpm - 900)/(6500/5600))) / 1700";
+		volume="0.4 * 1 * (thrust factor[0.6,0.2]) * 0.8 * (0.7 + 0.3 * (speed factor [10,60])) * engineOn * 0.85 * ((900 + ((rpm - 900)/(6500/5600))) factor [(((1200+1700)/2) - 2.5*150),(((1200+1700)/2) + 150)]) * ((900 + ((rpm - 900)/(6500/5600))) factor [(((1700+2300)/2) + 2.5*150),(((1700+2300)/2) - 150)]) * ((1 - 0.25*doors) max campos)";
+	};
+	class Sedan_02_Engine_Ext_Rpm3_SoundShader: baseEngineSedan_02_SoundShader
+	{
+		samples[]=
+		{
+			
+			{
+				"IndraPersonalMod\sounds\vaz_classic_engine_ext_rpm3.ogg",
+				1
+			}
+		};
+		frequency="0.85 * (900 + ((rpm - 900)/(6500/5600))) / 2300";
+		volume="0.4 * 1 * (thrust factor[0.1,0.45]) * (0.7 + 0.3 * (speed factor [10,60])) * engineOn * 1 * ((900 + ((rpm - 900)/(6500/5600))) factor [(((1700+2300)/2) - 2.5*150),(((1700+2300)/2) + 150)]) * ((900 + ((rpm - 900)/(6500/5600))) factor [(((2300+3250)/2) + 2.5*200),(((2300+3250)/2) - 200)]) * ((1 - 0.25*doors) max campos)";
+	};
+	class Sedan_02_Engine_Offload_Ext_Rpm3_SoundShader: baseEngineSedan_02_SoundShader
+	{
+		samples[]=
+		{
+			
+			{
+				"IndraPersonalMod\sounds\vaz_classic_engine_ext_offload_rpm3.ogg",
+				1
+			}
+		};
+		frequency="0.85 * (900 + ((rpm - 900)/(6500/5600))) / 2300";
+		volume="0.4 * 1 * (thrust factor[0.6,0.2]) * 0.8 * (0.7 + 0.3 * (speed factor [10,60])) * engineOn * 1 * ((900 + ((rpm - 900)/(6500/5600))) factor [(((1700+2300)/2) - 2.5*150),(((1700+2300)/2) + 150)]) * ((900 + ((rpm - 900)/(6500/5600))) factor [(((2300+3250)/2) + 2.5*200),(((2300+3250)/2) - 200)]) * ((1 - 0.25*doors) max campos)";
+	};
+	class Sedan_02_Engine_Ext_Rpm4_SoundShader: baseEngineSedan_02_SoundShader
+	{
+		samples[]=
+		{
+			
+			{
+				"IndraPersonalMod\sounds\vaz_classic_engine_ext_rpm4.ogg",
+				1
+			}
+		};
+		frequency="0.85 * (900 + ((rpm - 900)/(6500/5600))) / 3250";
+		volume="0.4 * 1 * (thrust factor[0.1,0.45]) * (0.7 + 0.3 * (speed factor [10,60])) * engineOn * 1 * ((900 + ((rpm - 900)/(6500/5600))) factor [(((2300+3250)/2) - 2.5*200),(((2300+3250)/2) + 200)]) * ((900 + ((rpm - 900)/(6500/5600))) factor [(((3250+4400)/2) + 2.5*200),(((3250+4400)/2) - 200)]) * ((1 - 0.25*doors) max campos)";
+	};
+	class Sedan_02_Engine_Offload_Ext_Rpm4_SoundShader: baseEngineSedan_02_SoundShader
+	{
+		samples[]=
+		{
+			
+			{
+				"IndraPersonalMod\sounds\vaz_classic_engine_ext_offload_rpm4.ogg",
+				1
+			}
+		};
+		frequency="0.85 * (900 + ((rpm - 900)/(6500/5600))) / 3250";
+		volume="0.4 * 1 * (thrust factor[0.6,0.2]) * 0.8 * (0.7 + 0.3 * (speed factor [10,60])) * engineOn * 1 * ((900 + ((rpm - 900)/(6500/5600))) factor [(((2300+3250)/2) - 2.5*200),(((2300+3250)/2) + 200)]) * ((900 + ((rpm - 900)/(6500/5600))) factor [(((3250+4400)/2) + 2.5*200),(((3250+4400)/2) - 200)]) * ((1 - 0.25*doors) max campos)";
+	};
+	class Sedan_02_Engine_Ext_Rpm5_SoundShader: baseEngineSedan_02_SoundShader
+	{
+		samples[]=
+		{
+			
+			{
+				"IndraPersonalMod\sounds\vaz_classic_engine_ext_rpm5.ogg",
+				1
+			}
+		};
+		frequency="(0.85 * (900 + ((rpm - 900)/(6500/5600))) / 4400) min (6500/5600)";
+		volume="0.4 * 1 * (thrust factor[0.1,0.45]) * (0.7 + 0.3 * (speed factor [10,60])) * engineOn * 1 * ((900 + ((rpm - 900)/(6500/5600))) factor [(((3250+4400)/2) - 2.5*200),(((3250+4400)/2) + 200)]) * ((1 - 0.25*doors) max campos)";
+	};
+	class Sedan_02_Engine_Offload_Ext_Rpm5_SoundShader: baseEngineSedan_02_SoundShader
+	{
+		samples[]=
+		{
+			
+			{
+				"IndraPersonalMod\sounds\vaz_classic_engine_ext_offload_rpm4.ogg",
+				1
+			}
+		};
+		frequency="(0.85 * (900 + ((rpm - 900)/(6500/5600))) / 4400) min (6500/5600)";
+		volume="0.4 * 1 * (thrust factor[0.6,0.2]) * 0.8 * (0.7 + 0.3 * (speed factor [10,60])) * engineOn * 1 * ((900 + ((rpm - 900)/(6500/5600))) factor [(((3250+4400)/2) - 2.5*200),(((3250+4400)/2) + 200)]) * ((1 - 0.25*doors) max campos)";
 	};
 };
